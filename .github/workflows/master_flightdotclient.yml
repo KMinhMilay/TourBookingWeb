@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'FlightDotClient'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A2A2331D39544A4592233490E4C06E4A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E924B8446143470E90EEC449FF074EF4 }}
           package: .
