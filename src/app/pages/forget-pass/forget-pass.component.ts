@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import Swal from 'sweetalert2';
+import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-forget-pass',
@@ -18,7 +20,8 @@ export class ForgetPassComponent {
     message: this.generateOTP(),
   };
   sentOtp: string = '';
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,    private meta: Meta,private title: Title,    @Inject(DOCUMENT) private dom: Document
+) {}
 
   ngOnInit() {
     this.email.valueChanges.pipe(debounceTime(500)).subscribe((data: any) => {
@@ -33,8 +36,52 @@ export class ForgetPassComponent {
           this.request.message = data;
         }
       });
+      this.setMetaForForgetPassPage();
   }
+ removeUnwantedMetaTags(): void {
+    // Lấy tất cả các thẻ meta
+    const metaTags = document.getElementsByTagName('meta');
+    
+    // Duyệt qua tất cả các thẻ meta và xóa những thẻ không mong muốn
+    for (let i = metaTags.length - 1; i >= 0; i--) {
+      const metaTag = metaTags[i];
+      const name = metaTag.getAttribute('name');
+      const property = metaTag.getAttribute('property');
+      
+      // Giữ lại các thẻ cụ thể
+      if (name === 'google-site-verification' || name === 'viewport' || name === 'charset') {
+        continue;
+      }
 
+      // Xóa các thẻ meta không mong muốn
+      metaTag.parentNode?.removeChild(metaTag);
+    }
+  }
+  setMetaForForgetPassPage() : void {
+    // Cập nhật tiêu đề
+    this.title.setTitle('FlightDot - Phục hồi mật khẩu của bạn');
+    
+    // Thêm các thẻ meta mới
+    this.meta.updateTag({ name: 'keywords', content: 'Đặt vé máy bay qua flightdot, FlightDot, flightdot booking, flightdot azure, minhkhanh, hoangtrung, flight.' });
+    this.meta.updateTag({ name: 'description', content: 'Website đặt vé máy bay - FlightDot tiện lợi và nhanh chóng, giúp bạn tìm kiếm, so sánh giá vé, và đặt chỗ chỉ trong vài bước đơn giản. Với giao diện thân thiện và hỗ trợ 24/7, chúng tôi mang đến trải nghiệm mua vé dễ dàng và an toàn cho mọi chuyến bay của bạn.' });
+    this.meta.updateTag({ property: 'og:url', content: 'https://flightdotclient.azurewebsites.net/forget-pass' });
+    this.meta.updateTag({ property: 'og:title', content: 'FlightDot - Phục hồi mật khẩu của bạn' });
+    this.meta.updateTag({ property: 'og:description', content: 'Website đặt vé máy bay - FlightDot tiện lợi và nhanh chóng, giúp bạn tìm kiếm, so sánh giá vé, và đặt chỗ chỉ trong vài bước đơn giản. Với giao diện thân thiện và hỗ trợ 24/7, chúng tôi mang đến trải nghiệm mua vé dễ dàng và an toàn cho mọi chuyến bay của bạn.' });
+    this.meta.updateTag({ property: 'og:image', content: 'https://i.imgur.com/WaACbcs.png' }); 
+    //this.meta.updateTag({ name: 'canonical', content: 'https://flightdotclient.azurewebsites.net/forget-pass' });
+    const currentURL = 'https://flightdotclient.azurewebsites.net/forget-pass';
+    this.updateCanonicalUrl(currentURL)
+  }
+  updateCanonicalUrl(url:string){
+    const head = this.dom.getElementsByTagName('head')[0];
+    var element: HTMLLinkElement= this.dom.querySelector(`link[rel='canonical']`) as HTMLLinkElement;
+    if (element==null) {
+      element= this.dom.createElement('link') as HTMLLinkElement;
+      head.appendChild(element);
+    }
+    element.setAttribute('rel','canonical')
+    element.setAttribute('href',url)
+  }
   generateOTP() {
     // Declare a digits variable
     // which stores all digits

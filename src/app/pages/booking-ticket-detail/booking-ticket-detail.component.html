@@ -4,7 +4,7 @@
   <h1 class="text-center color-2 fw-bold">ĐẶT VÉ</h1>
   <div class="ticket-info border-color-1" style="border-radius: 15px;padding: 15px;">
     <div class="row">
-      <h1 class="color-2 ms-3 fw-bold">THÔNG TIN ĐẶT VÉ</h1>
+      <h2 class="color-2 ms-3 fw-bold">THÔNG TIN ĐẶT VÉ</h2>
       <div
         class="ticket-info-detail col-12 border-ra"
         style="
@@ -14,42 +14,69 @@
           align-items: center;
         "
       >
+      <div class="row" style="          display: flex;
+      justify-content: center;
+      align-items: center;">
         <div
-          class="row border-color-2 p-3 border-ra"
-          style="border-radius: 20px; width: 1000px"
+          class="row p-3 "
+          style="border-radius: 20px; width: 1000px; margin-top:16px"
         >
-          <div class="col-7">
-            <h3 class="color-1 fw-bold font-20">NƠI ĐI - NƠI ĐẾN</h3>
-            <h1 class="color-2 fw-bold font-28">
-              {{ flightInfo?.chuyenBay.noiXuatPhat }} -
-              {{ flightInfo?.chuyenBay.noiDen }}
-            </h1>
-            <h3 class="color-1 fw-bold font-20">
-              NGÀY/GIỜ:
-              <span class="color-2"
-                >{{ flightInfo?.chuyenBay.ngayXuatPhat }}
-              </span>
-            </h3>
+          <div class="col-4" style="height: 300px;">
+            <img [src]="ImageUrl(flightInfo?.chuyenBay.noiXuatPhat)" alt="ImageNoiDi" sizes="center" style="width: 300px;height: 300px;">
           </div>
-          <div class="col-5">
-            <h3 class="color-1 fw-bold font-20">
-              MÁY BAY:
-              <span class="color-2">{{ flightInfo?.mayBay.tenMayBay }} </span>
-            </h3>
-            <h3 class="color-1 fw-bold font-20">
-              MÃ CHUYẾN:
-              <span class="color-2">{{
-                flightInfo?.chuyenBay.maChuyenBay
-              }}</span>
-            </h3>
-            <h3 class="color-1 fw-bold font-20">
-              GIÁ ĐƠN VÉ:
-              <span class="color-2">{{ flightInfo?.chuyenBay.donGia }} </span>
-            </h3>
+          <div class="col-4" style="height: 300px;justify-content: center;align-items: center;display: flex;">
+            <h2 class="color-2 fw-bold font-28">
+              {{ flightInfo?.chuyenBay.noiXuatPhat }} đến
+              {{ flightInfo?.chuyenBay.noiDen }}
+            </h2>
+          </div>
+          <div class="col-4" style="height: 300px;">
+            <img [src]="ImageUrl(flightInfo?.chuyenBay.noiDen)" alt="ImageNoiDen" sizes="center" style="width: 300px;height: 300px;">
           </div>
         </div>
+        <div
+        class="row border-color-2 p-3 border-ra"
+        style="border-radius: 20px; width: 1000px; margin-top: 24px;"
+      >
+        <div class="col-7">
+          <h3 class="color-1 fw-bold font-20">NƠI ĐI - NƠI ĐẾN</h3>
+          <h2 class="color-2 fw-bold font-28">
+            {{ flightInfo?.chuyenBay.noiXuatPhat }} -
+            {{ flightInfo?.chuyenBay.noiDen }}
+          </h2>
+          <h3 class="color-1 fw-bold font-20">
+            NGÀY/GIỜ:
+            <span class="color-2"
+              >{{ flightInfo?.chuyenBay.ngayXuatPhat }}
+            </span>
+          </h3>
+        </div>
+        <div class="col-5">
+          <h3 class="color-1 fw-bold font-20">
+            MÁY BAY:
+            <span class="color-2">{{ flightInfo?.mayBay.tenMayBay }} </span>
+          </h3>
+          <h3 class="color-1 fw-bold font-20">
+            MÃ CHUYẾN:
+            <span class="color-2">{{
+              flightInfo?.chuyenBay.maChuyenBay
+            }}</span>
+          </h3>
+          <h3 class="color-1 fw-bold font-20">
+            GIÁ VÉ ECO:
+            <span class="color-2">{{ flightInfo?.chuyenBay.donGia }} $ / 1 vé </span>
+          </h3>
+          <h3 class="color-1 fw-bold font-20">
+            GIÁ VÉ BSN:
+            <span class="color-2">{{ flightInfo?.chuyenBay.donGia*3 }} $ / 1 vé </span>
+          </h3>
+        </div>
       </div>
-      <div class="col-12">
+    </div>
+      </div>
+      <div class="sharethis-inline-share-buttons"></div>
+
+      <div class="col-12" *ngIf="isLoggedIn()">
         <div class="row" [formGroup]="form">
           <div class="col-6">
             <label
@@ -129,7 +156,7 @@
             <label
               for="inputSum"
               class="form-label fs-4 color-2 fw-bold mt-4 font-18"
-              >Tổng giá</label
+              >Tổng giá ($)</label
             >
             <input
               type="text"
@@ -194,16 +221,35 @@
                 </div>
               </div>
             </div>
-            <div class="ticket-btn mt-6 d-flex justify-content-end h-50px" style="margin-top: 20px;">
+            <div class="ticket-btn mt-6 d-flex justify-content-end h-50px" style="margin-top: 20px">
               <input
-                style="background-color: #146C94 !important;color: white;"
+                style="background-color: #146C94 !important;color: white; height: 50px;"
                 type="submit"
                 (click)="showOnInit()"
                 class="btn  px-5 py-2 fw-bold border-color-1"
                 value="Đặt vé"
               />
+
             </div>
+            
+            
           </div>
+        </div>
+      </div>
+
+      <div class="col-12" *ngIf="!isLoggedIn()">
+        <p class="mt-4 color-2 text-justify fs-5 text-second justify-content-center d-flex">
+          <span style="color: red; margin-right: 5px">*</span> Vui lòng đăng nhập để thực hiện việc đặt vé máy bay
+        </p>
+        <div class="ticket-btn mt-6 d-flex justify-content-center h-50px" style="margin-top: 20px">
+          <input
+            style="background-color: #146C94 !important;color: white; height: 50px;"
+            type="submit"
+            (click)="toLogin()"
+            class="btn  px-5 py-2 fw-bold border-color-1"
+            value="Đăng nhập"
+          />
+
         </div>
       </div>
     </div>

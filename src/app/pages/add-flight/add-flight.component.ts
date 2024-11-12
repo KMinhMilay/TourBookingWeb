@@ -1,9 +1,9 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { NgSelectOption } from '@angular/forms';
-import { FlightDetails } from 'src/app/shared/models/FlightDetailModel';
-import { FlightApiService } from 'src/app/shared/services/flight-api.service';
-import { PlaneApiService } from 'src/app/shared/services/plane-api.service';
+import { FlightDetails } from '../../shared/models/FlightDetailModel';
+import { FlightApiService } from '../../shared/services/flight-api.service';
+import { PlaneApiService } from '../../shared/services/plane-api.service';
 import Swal from 'sweetalert2';
 import { ReactiveFormsModule, FormsModule, FormGroup, Validators  } from '@angular/forms';
 
@@ -177,7 +177,7 @@ export class AddFlightComponent implements OnInit {
       default:
         break;
     }
-    this.addFlightRequest.maChuyenBay = this.addFlightRequest.ngayXuatPhat.split('-')[2] + this.addFlightRequest.ngayXuatPhat.split('-')[1] + this.addFlightRequest.ngayXuatPhat.split('-')[0].slice(2) + tmpDepartureLocation + "TO" + tmpArrivalLocation + "-" + this.addFlightRequest.maMayBay
+    this.addFlightRequest.maChuyenBay = this.addFlightRequest.ngayXuatPhat.split('-')[2] + this.addFlightRequest.ngayXuatPhat.split('-')[1] + this.addFlightRequest.ngayXuatPhat.split('-')[0].slice(2) + tmpDepartureLocation + "TO" + tmpArrivalLocation + this.addFlightRequest.maMayBay.replace("Plane", "");
   }
   dataIsNotNull(): boolean{
     if (

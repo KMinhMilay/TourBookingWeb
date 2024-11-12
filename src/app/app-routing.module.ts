@@ -18,6 +18,13 @@ import { ViewProfileComponent } from './pages/view-profile/view-profile.componen
 import { BookingHistoryComponent } from './pages/booking-history/booking-history.component';
 import { BookingTicketComponent } from './pages/booking-ticket/booking-ticket.component';
 import { BookingTicketDetailComponent } from './pages/booking-ticket-detail/booking-ticket-detail.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { filter, map, mergeMap } from 'rxjs/operators';
+import { InvoicesComponent } from './pages/invoices/invoices.component';
+import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
+import { PaymentResultComponent } from './pages/payment-result/payment-result.component';
 
 const routes: Routes = [
   {
@@ -57,9 +64,13 @@ const routes: Routes = [
   { path: 'booking-history', component: BookingHistoryComponent },
   { path: 'booking-ticket', component: BookingTicketComponent },
   {
-    path: 'booking-ticket-detail/:code',
+    path: 'booking-ticket-detail/:slug',
     component: BookingTicketDetailComponent,
   },
+  { path: 'invoices', component: InvoicesComponent },
+  { path: 'invoice-detail/:id/:slug', component: InvoiceDetailComponent },
+  { path: 'payment-result/:id', component: PaymentResultComponent },
+  { path: '**', pathMatch: 'full', component: NotFoundComponent },
 ];
 
 @NgModule({

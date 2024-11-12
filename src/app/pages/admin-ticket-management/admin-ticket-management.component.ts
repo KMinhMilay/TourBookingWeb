@@ -2,8 +2,8 @@ import { Time } from '@angular/common';
 import { Component, ViewChild, AfterViewInit, OnInit  } from '@angular/core';
 import {MatTableModule, MatTableDataSource} from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import { ChiTietVeService } from 'src/app/shared/services/chiTietVe.service';
-import { ChiTietVe } from 'src/app/shared/models/chiTietVe';
+import { ChiTietVeService } from '../../shared/services/chiTietVe.service';
+import { ChiTietVe } from '../../shared/models/chiTietVe';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 
@@ -18,6 +18,8 @@ export interface TicketDetails {
   soLuong: number;
   tongGia: number;
   tinhTrang: string;
+  maGiaoDich: string;
+  tenKieuThanhToan: string;
 }
 
 @Component({
@@ -38,6 +40,8 @@ export class AdminTicketManagementComponent implements AfterViewInit, OnInit{
     'soLuong',
     'tongGia',
     'tinhTrang',
+    'maGiaoDich',
+    'tenKieuThanhToan',
     'action'
   ];
   chiTietVes: TicketDetails[] = [];
@@ -87,7 +91,7 @@ export class AdminTicketManagementComponent implements AfterViewInit, OnInit{
       MaCTV: element.maCTV,
       MaVe: element.maVe,
 
-      LoaiVe: element.loaiVe,
+      LoaiVe: element.loaiVe.trim(),
       
       MaChuyenBay: element.maChuyenBay,
       
@@ -96,6 +100,7 @@ export class AdminTicketManagementComponent implements AfterViewInit, OnInit{
       TinhTrang: 'Đã duyệt',
       TongGia: element.tongGia,
     };
+    console.log(request);
     this.chiTietVeService.update(request).subscribe(
       () => {
         Swal.fire(
