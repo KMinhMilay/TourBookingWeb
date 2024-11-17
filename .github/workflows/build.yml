@@ -1,61 +1,27 @@
-name: Build and Analyze
+name: Build
 
 on:
   push:
     branches:
       - master
 
+
 jobs:
   build:
     name: Build and analyze
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
+    
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full clone for better analysis
-
-      # Step 2: Set up .NET 6 SDK
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-
-      # Step 3: Cache SonarQube Packages
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~\.sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      # Step 4: Install SonarQube Scanner Globally
-      - name: Install SonarQube Scanner
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet tool update --global dotnet-sonarscanner
-
-      # Step 5: Start SonarQube Analysis
-      - name: SonarQube Begin
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: "http://localhost:9000"
-        run: |
-          dotnet-sonarscanner begin `
-          /k:"FlightDotAPI" `
-          /d:sonar.host.url="http://localhost:9000" `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-      # Step 6: Build the project
-      - name: Build Project
-        run: dotnet build --configuration Release
-
-      # Step 7: End SonarQube Analysis
-      - name: SonarQube End
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet-sonarscanner end `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: sonarsource/sonarqube-quality-gate-action@master
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
